@@ -53,13 +53,23 @@ export const getSearchPairs = (term, type) => {
     })
 }
 
+export const likePlaylistById = (id, lt, email) => {
+    return api.put(`/like`, {
+        // SPECIFY THE PAYLOAD
+        id : id,
+        lt : lt,
+        email: email
+    })
+}
+
 const apis = {
     createPlaylist,
     deletePlaylistById,
     getPlaylistById,
     getPlaylistPairs,
     updatePlaylistById,
-    getSearchPairs
+    getSearchPairs,
+    likePlaylistById
 }
 
 export default apis

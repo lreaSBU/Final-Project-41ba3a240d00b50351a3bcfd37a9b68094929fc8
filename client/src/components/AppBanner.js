@@ -102,14 +102,14 @@ export default function AppBanner() {
     }
     let addButt = "";
     if(!store.currentList){
-        if(store.currentView == 1){ //add list button
+        if(store.currentView == 1 && auth.loggedIn){ //add list button
             addButt = <Fab 
                     color="primary" 
                     aria-label="add"
                     id="add-list-button"
                     onClick={handleCreateNewList}
                     > <AddIcon /> </Fab>
-        }else if(store.currentView){ //search bar
+        }else if(store.currentView > 1){ //search bar
             addButt = <SearchBar />
         }
     }
@@ -143,6 +143,9 @@ export default function AppBanner() {
                         <Link style={{ textDecoration: 'none', color: 'white' }} onClick={handleAll} to="/">👥</Link>
                         <Link style={{ textDecoration: 'none', color: 'white' }} onClick={handleUser} to="/">👤</Link>
                     </Typography>
+                    <Box sx={{ width: '5%' }}></Box>
+                    <Box sx={{ fontSize: '45px' }}>|</Box>
+                    <Box sx={{ width: '5%' }}></Box>
                     {addButt}
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -165,42 +168,4 @@ export default function AppBanner() {
             }
         </Box>
     );
-    /* //SWAP TO THIS ONCE SEARCHBAR IS IMPLIMENTED!!!!!!!!
-    return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
-                    >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>🏠</Link>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/all/'>👥</Link>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/user/'>👤</Link>
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{searchBar}</Box>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            { getAccountMenu(auth.loggedIn) }
-                        </IconButton>
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            {
-                menu
-            }
-        </Box>
-    );
-    */
 }

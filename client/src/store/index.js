@@ -339,11 +339,6 @@ function GlobalStoreContextProvider(props) {
             console.log("updatePlaylist: " + JSON.stringify(pl));
             const response = await api.updatePlaylistById(pl._id, pl);
             if (response.data.success) {
-                /*let pairsArray = response.data.idNamePairs;
-                storeReducer({
-                    type: GlobalStoreActionType.CHANGE_SEARCH_TERM,
-                    payload: pairsArray
-                });*/
                 console.log("PUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHED");
                 store.loadIdNamePairs(); //refresh the current list to reflect publishing changes
             }
@@ -352,6 +347,20 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncPublish();
+    }
+
+    store.changeLikes = function(id, lt){
+        async function asyncLike(){
+            const response = await api.likePlaylistById(id, lt, auth.user.email);
+            if (response.data.success) {
+                console.log("LIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKED");
+                //store.loadIdNamePairs(); //refresh the current list to reflect publishing changes
+            }
+            else {
+                console.log("API FAILED TO LIKE PLAYLIST");
+            }
+        }
+        asyncLike();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
