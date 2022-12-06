@@ -353,8 +353,15 @@ function GlobalStoreContextProvider(props) {
         async function asyncLike(){
             const response = await api.likePlaylistById(id, lt, auth.user.email);
             if (response.data.success) {
-                console.log("LIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKED");
-                //store.loadIdNamePairs(); //refresh the current list to reflect publishing changes
+                console.log("LIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKEDLIKED: " + response.data.acStat);
+                if(response.data.acStat) for(var i = 0; i < store.searchTerm.length; i++){
+                    if(store.searchTerm[i]._id == id){
+                        if(lt) store.searchTerm[i].likes++;
+                        else store.searchTerm[i].dislikes++;
+                        break;
+                    }
+                }
+                store.loadIdNamePairs(); //refresh the current list to reflect publishing changes
             }
             else {
                 console.log("API FAILED TO LIKE PLAYLIST");
@@ -364,9 +371,10 @@ function GlobalStoreContextProvider(props) {
     }
 
     // THIS FUNCTION CREATES A NEW LIST
-    store.createNewList = async function () {
+    store.createNewList = async function (nln = null, nls = []) {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.firstName + " " + auth.user.lastName);
+        if(nln) newListName = nln;
+        const response = await api.createPlaylist(newListName, nls, auth.user.email, auth.user.firstName + " " + auth.user.lastName);
         console.log("createNewList response: " + response);
         if (response.status === 201){
             tps.clearAllTransactions();

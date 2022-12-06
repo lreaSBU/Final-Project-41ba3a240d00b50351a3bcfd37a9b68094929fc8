@@ -49,7 +49,7 @@ function ListCard(props) {
     }
     
     function handleDup(e){
-        store.duplicateList(idNamePair.copy);
+        store.createNewList(idNamePair.name, idNamePair.copy.songs);
     }
 
     function handlePub(e){
