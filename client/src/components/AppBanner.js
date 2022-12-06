@@ -5,11 +5,13 @@ import { GlobalStoreContext } from '../store'
 
 import EditToolbar from './EditToolbar'
 import SearchBar from './Searchbar'
+import Sortbar from './Sortbar'
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import SortIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,9 +23,20 @@ export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [banchor, setBanchor] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const isSortOpen = Boolean(banchor);
 
-    
+    const handleSortMenuOpen = (event) => {
+        setBanchor(event.currentTarget);
+    };
+
+    function handleSort(type){
+        console.log("MENU_EVENT: " + type);
+        handleMenuClose();
+        store.changeSort(type);
+    }
+
     function handleCreateNewList() {
         store.createNewList();
     }
@@ -45,6 +58,7 @@ export default function AppBanner() {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+        setBanchor(null);
     };
 
     const handleLogout = () => {
@@ -100,6 +114,40 @@ export default function AppBanner() {
             editToolbar = <EditToolbar />;
         }
     }
+    const sMen = <Menu
+        anchorEl={banchor}
+        anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        id={'sort-menu'}
+        keepMounted
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        open={isSortOpen}
+        onClose={handleMenuClose}
+    >
+        <MenuItem onClick={(event) => {handleSort(1)}}>By Creation Date (Old-New)</MenuItem>
+        <MenuItem onClick={(event) => {handleSort(2)}}>By Last Edit Date (New-Old)</MenuItem>
+        <MenuItem onClick={(event) => {handleSort(3)}}>By Name (A-Z)</MenuItem>
+    </Menu>
+    let sortMenu = '';
+    if(store.currentView){
+        sortMenu =
+        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton
+                size="large"
+                edge="end"
+                aria-label="sort mode"
+                aria-controls={'primary-search-account-menu'}
+                aria-haspopup="true"
+                onClick={handleSortMenuOpen}
+                color="inherit"
+            ><SortIcon /></IconButton>
+        </Box>
+    }
     let addButt = "";
     if(!store.currentList){
         if(store.currentView == 1 && auth.loggedIn){ //add list button
@@ -144,10 +192,11 @@ export default function AppBanner() {
                         <Link style={{ textDecoration: 'none', color: 'white' }} onClick={handleUser} to="/">👤</Link>
                     </Typography>
                     <Box sx={{ width: '5%' }}></Box>
-                    <Box sx={{ fontSize: '45px' }}>|</Box>
+                    <Box id='bannerStatus' sx={{ fontSize: '32px' }}>{!auth.loggedIn ? '|' : (store.currentView == 1 ? 'Home' : (store.currentView == 2 ? 'Playlist Search: ' : 'User Search: '))}</Box>
                     <Box sx={{ width: '5%' }}></Box>
                     {addButt}
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    {sortMenu}
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
@@ -163,9 +212,8 @@ export default function AppBanner() {
                     </Box>
                 </Toolbar>
             </AppBar>
-            {
-                menu
-            }
+            {sMen}
+            {menu}
         </Box>
     );
 }

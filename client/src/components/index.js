@@ -15,6 +15,7 @@ import WorkspaceScreen from './WorkspaceScreen'
 import AllWrapper from './AllWrapper'
 import UserWrapper from './UserWrapper'
 import Searchbar from './Searchbar'
+import Sortbar from './Sortbar'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -37,5 +38,6 @@ export {
     Searchbar,
     SplashScreen,
     Statusbar, 
+    Sortbar,
     UserWrapper,
     WorkspaceScreen }

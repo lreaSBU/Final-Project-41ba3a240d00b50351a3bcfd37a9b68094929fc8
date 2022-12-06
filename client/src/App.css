@@ -12,12 +12,16 @@
   --swatch-contrast: #111111;
   --swatch-accent: #669966;
   --swatch-status: #123456;
-  --my-font-family: "Robaaaoto";
+  --my-font-family: "Roboto";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
 body {
   background-color: var(--swatch-foundation);
+}
+
+#bannerStatus{
+  font-family: var(--my-font-family)
 }
 
 #root {
