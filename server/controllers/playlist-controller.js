@@ -115,7 +115,7 @@ getSearchPairs = async (req, res) => {
     const body = req.body
     console.log("SEARCHING TYPE: " + body.type);
     console.log("SEARCHING TERM:" + body.term);
-    await Playlist.find({ name: body.term }, (err, playlists) => { //published: true, 
+    await Playlist.find((body.type == 2 ? { published: true, name: {"$regex": body.term, "$options": "i"} } : { published: true, ownerName: {"$regex": body.term, "$options": "i"} }), (err, playlists) => { 
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -130,7 +130,11 @@ getSearchPairs = async (req, res) => {
                 let list = playlists[key];
                 let pair = {
                     _id: list._id,
-                    name: list.name
+                    name: list.name,
+                    likes: list.likes,
+                    dislikes: list.dislikes,
+                    ownerName: list.ownerName,
+                    copy: list
                 };
                 pairs.push(pair);
             }
@@ -163,7 +167,8 @@ getPlaylistPairs = async (req, res) => {
                         let list = playlists[key];
                         let pair = {
                             _id: list._id,
-                            name: list.name
+                            name: list.name,
+                            copy: list
                         };
                         pairs.push(pair);
                     }
@@ -190,7 +195,7 @@ getPlaylists = async (req, res) => {
 updatePlaylist = async (req, res) => {
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
-    console.log("req.body.name: " + req.body.name);
+    //console.log("req.body.name: " + req.body.name);
 
     if (!body) {
         return res.status(400).json({
@@ -219,6 +224,10 @@ updatePlaylist = async (req, res) => {
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+                    list.published = body.playlist.published;
+                    list.comments = body.playlist.comments;
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
                     list
                         .save()
                         .then(() => {

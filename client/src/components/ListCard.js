@@ -49,11 +49,11 @@ function ListCard(props) {
     }
     
     function handleDup(e){
-        console.log("vndjwbvwji");
+        store.duplicateList(idNamePair.copy);
     }
 
     function handlePub(e){
-        console.log("PUBLISH");
+        store.publishList(idNamePair.copy);
     }
 
     function handleToggleEdit(event) {    
@@ -96,8 +96,9 @@ function ListCard(props) {
         cardStatus = true;
     }
     let ldl = '';
+    let npl = '';
     if(store.currentView > 1){
-        ldl = <div>
+        ldl = (<div>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleLike} aria-label='like'>
                     <Box sx={{ p: 1, flexGrow: 1, color: 'black' }}>{idNamePair.likes}</Box>
@@ -110,21 +111,19 @@ function ListCard(props) {
                     <DislikeIcon style={{fontSize:'32pt'}} />
                 </IconButton>
             </Box>
-        </div>
+        </div>);
+        npl = <Box sx={{ p: 1, flexGrow: 1, fontSize: '16px'}}>{idNamePair.ownerName}</Box>
     }else{
         ldl = <div>
             <Box>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                {(idNamePair.copy.published ? '' : (<IconButton onClick={handleToggleEdit} aria-label='edit'>
                     <EditIcon style={{fontSize:'32pt'}} />
-                </IconButton>
+                </IconButton>))}
             </Box>
             <Box>
                 <IconButton onClick={(event) => {handleDeleteList(event, idNamePair._id)}} aria-label='delete'>
                     <DeleteIcon style={{fontSize:'32pt'}} />
                 </IconButton>
-            </Box>
-            <Box>
-                <Button sx={{bgcolor: '#e6e6e6', fontSize: '16px', textAlign: "center"}} onClick={handlePub}>Publish</Button>
             </Box>
         </div>
     }
@@ -132,14 +131,18 @@ function ListCard(props) {
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
+            sx={{ marginTop: '15px', display: 'flex', p: 1, color: (idNamePair.copy.published ? 'yellow' : 'red')}}
             style={{ width: '100%', fontSize: '48pt' }}
             button
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+            <div>
+                <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                {npl}
+            </div>
+            <Box sx={{flexGrow: 1 }}></Box>
             {ldl}
         </ListItem>
 
@@ -168,7 +171,7 @@ function ListCard(props) {
         <div>
             <List 
                 id="playlist-cards" 
-                sx={{ width: '100%', bgcolor: '#669966' }}
+                sx={{ width: '100%', bgcolor: '#669966', maxHeight: '350px', overflow: 'auto'}}
             >
                 {
                     store.currentList.songs.map((song, index) => (
@@ -182,7 +185,8 @@ function ListCard(props) {
                 }
             </List>
             <Box sx={{bgcolor: '#669966', fontSize: '32px', textAlign: "center"}}>⋮</Box>
-            <Button sx={{bgcolor: '#e6e6e6', fontSize: '16px', textAlign: "center"}} onClick={handleDup}>Duplicate</Button>
+            <Button sx={{bgcolor: '#e6e6e6', fontSize: '16px', textAlign: "center", m: 1}} onClick={handleDup}>Duplicate</Button>
+            {(idNamePair.copy.published ? '' : <Button sx={{bgcolor: '#e6e6e6', fontSize: '16px', textAlign: "center", m: 1}} onClick={handlePub}>Publish</Button>)}
         </div>
     }
     return (

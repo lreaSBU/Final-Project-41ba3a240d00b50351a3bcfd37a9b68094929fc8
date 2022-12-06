@@ -333,10 +333,31 @@ function GlobalStoreContextProvider(props) {
         asyncstartSearch();
     }
 
+    store.publishList = function(pl){
+        async function asyncPublish(){
+            pl.published = true;
+            console.log("updatePlaylist: " + JSON.stringify(pl));
+            const response = await api.updatePlaylistById(pl._id, pl);
+            if (response.data.success) {
+                /*let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.CHANGE_SEARCH_TERM,
+                    payload: pairsArray
+                });*/
+                console.log("PUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHED");
+                store.loadIdNamePairs(); //refresh the current list to reflect publishing changes
+            }
+            else {
+                console.log("API FAILED TO PUBLISH PLAYLIST");
+            }
+        }
+        asyncPublish();
+    }
+
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        const response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.firstName + " " + auth.user.lastName);
         console.log("createNewList response: " + response);
         if (response.status === 201){
             tps.clearAllTransactions();
@@ -590,19 +611,19 @@ function GlobalStoreContextProvider(props) {
         tps.doTransaction();
     }
     store.canEditBar = function(){
-        return store.currentModal === "NONE";
+        return store.currentModal === "NONE" && (store.currentList !== null) && !store.currentList.published;
     }
     store.canAddNewSong = function() {
-        return store.canEditBar() && (store.currentList !== null);
+        return store.canEditBar();
     }
     store.canUndo = function() {
-        return store.canEditBar() && ((store.currentList !== null) && tps.hasTransactionToUndo());
+        return store.canEditBar() && tps.hasTransactionToUndo();
     }
     store.canRedo = function() {
-        return store.canEditBar() && ((store.currentList !== null) && tps.hasTransactionToRedo());
+        return store.canEditBar() && tps.hasTransactionToRedo();
     }
     store.canClose = function() {
-        return store.canEditBar() && (store.currentList !== null);
+        return store.currentModal === "NONE" && (store.currentList !== null);
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
