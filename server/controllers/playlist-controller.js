@@ -111,6 +111,33 @@ getPlaylistById = async (req, res) => {
         asyncFindUser(list);
     }).catch(err => console.log(err))
 }
+getSearchPairs = async (req, res) => {
+    const body = req.body
+    console.log("SEARCHING TYPE: " + body.type);
+    console.log("SEARCHING TERM:" + body.term);
+    await Playlist.find({ name: body.term }, (err, playlists) => { //published: true, 
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!playlists) {
+            console.log("!playlists.length");
+            return res
+                .status(404)
+                .json({ success: false, error: 'Playlists not found' })
+        }else{
+            let pairs = [];
+            for (let key in playlists) {
+                let list = playlists[key];
+                let pair = {
+                    _id: list._id,
+                    name: list.name
+                };
+                pairs.push(pair);
+            }
+            return res.status(200).json({ success: true, idNamePairs: pairs })
+        }
+    }).catch(err => console.log(err));
+}
 getPlaylistPairs = async (req, res) => {
     console.log("getPlaylistPairs OF TYPE::::: " + JSON.stringify(req.params.type));
     await User.findOne({ _id: req.userId }, (err, user) => {
@@ -225,5 +252,6 @@ module.exports = {
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    getSearchPairs
 }

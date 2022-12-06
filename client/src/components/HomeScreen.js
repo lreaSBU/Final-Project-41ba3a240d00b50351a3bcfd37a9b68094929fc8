@@ -30,7 +30,26 @@ const HomeScreen = () => {
     let listCard = "";
     if (store) {
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!RENDERING FOR CURRENTVIEW: " + store.currentView);
-        listCard = 
+        console.log(store.idNamePairs.length);
+        console.log(store.searchTerm.length);
+        if(store.currentView > 1){
+            if(store.searchTerm.length > 0){
+                listCard = 
+                <List sx={{ width: '100%', left: '0%', bgcolor: 'background.paper' }}>
+                {
+                    store.searchTerm.map((pair) => (
+                        <ListCard
+                            sx={{bgcolor: ((store.currentList && (pair._id == store.currentList._id)) ? 'red' : 'background.paper')}}
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+                }
+                </List>;
+            }
+        }else{
+            listCard = 
             <List sx={{ width: '100%', left: '0%', bgcolor: 'background.paper' }}>
             {
                 store.idNamePairs.map((pair) => (
@@ -43,6 +62,7 @@ const HomeScreen = () => {
                 ))
             }
             </List>;
+        }
     }
     return (
         <div id="playlist-selector">
