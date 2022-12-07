@@ -73,7 +73,7 @@ const HomeScreen = () => {
     }
 
     let inspect = '';
-    if(store.currentList && store.currentList.published) if(store.tabMode){ //comments
+    if(store.currentList) if(store.currentList.published && store.tabMode){ //comments
         var index = 0;
         inspect = 
         <div>
@@ -91,7 +91,7 @@ const HomeScreen = () => {
             <input id="cText" type="text" onKeyPress={handleCommentSub} />
         </div>;
         //inspect = <div>COMMENTS!!!</div>
-    }else{ //player
+    }else if(!store.tabMode){ //player
         inspect = <div>PLAYER!!!</div>
     }
 

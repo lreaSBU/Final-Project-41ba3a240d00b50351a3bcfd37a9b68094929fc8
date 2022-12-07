@@ -274,7 +274,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: payload,
                     searchTerm: [],
                      sortMode : store.sortMode,
-                     tabMode: store.tabMode
+                     tabMode: 0
                 });
             }
             case GlobalStoreActionType.CHANGE_SEARCH_TERM: {

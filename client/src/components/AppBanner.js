@@ -103,7 +103,7 @@ export default function AppBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem href='/' onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
     let editToolbar = "";

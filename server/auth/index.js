@@ -50,6 +50,11 @@ function authManager() {
         }, process.env.JWT_SECRET);
     }
 
+    trivial = (req, res, next) => {
+        console.log('trivially passing new request!!!');
+        next();
+    }
+
     return this;
 }
 
