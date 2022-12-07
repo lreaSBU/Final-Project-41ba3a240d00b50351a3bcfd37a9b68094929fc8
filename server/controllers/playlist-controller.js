@@ -198,6 +198,47 @@ getPlaylists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+commentPlaylist = async (req, res) => {
+    const body = req.body;
+    console.log("COMMENTING NEW: " + JSON.stringify(body));
+    if (!body) {
+        console.log("FAIL 100");
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a body to update',
+        })
+    }
+    Playlist.findOne({ _id: body.id }, (err, list) => {
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'Playlist not found!'
+            })
+        }
+        
+        list.comments.push({name: body.name, msg: body.msg});
+
+        list
+        .save()
+        .then(() => {
+            console.log("SUCCESS!!!");
+            return res.status(200).json({
+                success: true,
+                cDat: {name: body.name, msg: body.msg},
+                id: list._id,
+                message: 'Playlist updated!',
+            })
+        })
+        .catch(error => {
+            console.log("FAILURE: " + JSON.stringify(error));
+            return res.status(404).json({
+                error,
+                message: 'Playlist not updated!',
+            })
+        })
+    })
+}
+
 likePlaylist = async (req, res) => {
     const body = req.body;
     if (!body) {
@@ -321,5 +362,6 @@ module.exports = {
     getPlaylists,
     updatePlaylist,
     getSearchPairs,
-    likePlaylist
+    likePlaylist,
+    commentPlaylist
 }

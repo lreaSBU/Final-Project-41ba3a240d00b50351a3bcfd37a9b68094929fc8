@@ -20,7 +20,7 @@ const playlistSchema = new Schema(
         dislikers: {type: Array, default: []},
         comments: {type: [{
             msg: String,
-            email: String
+            name: String
         }], required: true},
         songs: { type: [{
             title: String,

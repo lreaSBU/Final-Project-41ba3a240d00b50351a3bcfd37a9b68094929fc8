@@ -33,7 +33,9 @@ export const GlobalStoreActionType = {
     HIDE_MODALS: "HIDE_MODALS",
     SIGNAL_VIEW: "SIGNAL_VIEW",
     CHANGE_SEARCH_TERM: "CHANGE_SEARCH_TERM",
-    CHANGE_SORT_MODE: "CHANGE_SORT_MODE"
+    CHANGE_SORT_MODE: "CHANGE_SORT_MODE",
+    SWITCH_TAB: "SWITCH_TAB",
+    SWAP_COMMENTS: "SWAP_COMMENTS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -62,7 +64,8 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         currentView: 0,
         searchTerm: [],
-         sortMode : 1
+        sortMode : 1,
+        tabMode: 0
     });
     const history = useHistory();
 
@@ -91,7 +94,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                    tabMode: store.tabMode
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -109,7 +113,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 })
             }
             // CREATE A NEW LIST
@@ -126,7 +131,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -143,7 +149,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -160,7 +167,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: payload.playlist,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             // UPDATE A LIST
@@ -177,7 +185,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             // START EDITING A LIST NAME
@@ -194,7 +203,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             // 
@@ -211,7 +221,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -227,7 +238,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -243,7 +255,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             case GlobalStoreActionType.SIGNAL_VIEW: {
@@ -260,7 +273,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: store.listMarkedForDeletion,
                     currentView: payload,
                     searchTerm: [],
-                     sortMode : store.sortMode
+                     sortMode : store.sortMode,
+                     tabMode: store.tabMode
                 });
             }
             case GlobalStoreActionType.CHANGE_SEARCH_TERM: {
@@ -276,7 +290,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     searchTerm: payload.data,
-                    sortMode : payload.acTerm
+                    sortMode : payload.acTerm,
+                    tabMode: store.tabMode
                 });
             }
             case GlobalStoreActionType.CHANGE_SORT_MODE: {
@@ -292,7 +307,42 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: store.listMarkedForDeletion,
                     currentView: store.currentView,
                     searchTerm: store.searchTerm,
-                    sortMode : payload
+                    sortMode : payload,
+                    tabMode: store.tabMode
+                });
+            }
+            case GlobalStoreActionType.SWITCH_TAB: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: store.listNameActive,
+                    listIdMarkedForDeletion: store.listIdMarkedForDeletion,
+                    listMarkedForDeletion: store.listMarkedForDeletion,
+                    currentView: store.currentView,
+                    searchTerm: store.searchTerm,
+                    sortMode : store.sortMode,
+                    tabMode: payload
+                });
+            }
+            case GlobalStoreActionType.SWAP_COMMENTS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: payload,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: store.listNameActive,
+                    listIdMarkedForDeletion: store.listIdMarkedForDeletion,
+                    listMarkedForDeletion: store.listMarkedForDeletion,
+                    currentView: store.currentView,
+                    searchTerm: store.searchTerm,
+                    sortMode : store.sortMode,
+                    tabMode: store.tabMode
                 });
             }
             default:
@@ -344,6 +394,39 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
+    }
+
+    store.switchTab = function(tab){
+        storeReducer({
+            type: GlobalStoreActionType.SWITCH_TAB,
+            payload: tab
+        });
+        //if(store.currentView == 1) store.loadIdNamePairs(store.currentList, type); //refresh
+        //else if(store.currentView > 1) store.startSearch(store.sortMode, type); //refresh this too
+    }
+
+    store.startComment = function(msg){
+        async function asyncComment(){
+            const response = await api.addCommentById(msg, auth.user.firstName + " " + auth.user.lastName, store.currentList._id);
+            if (response.data.success) {
+                console.log("COMMENTCOMMENTCOMMENTCOMMENTCOMMENTCOMMENTCOMMENTCOMMENTCOMMENTCOMMENT");
+                //store.loadIdNamePairs(); //refresh the current list to reflect publishing changes
+                if(store.currentList._id == response.data.id){
+                    console.log("ACTUALLY SETTING COMMENT APPEARANCE: " + JSON.stringify(response.data.cDat));
+                    //store.currentList.comments.push(response.data.cDat);
+                    var copy = JSON.parse(JSON.stringify(store.currentList));
+                    copy.comments.push(response.data.cDat);
+                    storeReducer({
+                        type: GlobalStoreActionType.SWAP_COMMENTS,
+                        payload: copy 
+                    });
+                }
+            }
+            else {
+                console.log("API FAILED TO COMMENT ON PLAYLIST");
+            }
+        }
+        asyncComment();
     }
 
     store.startSearch = function(st, sm = 1){

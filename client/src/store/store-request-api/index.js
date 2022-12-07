@@ -62,6 +62,15 @@ export const likePlaylistById = (id, lt, email) => {
     })
 }
 
+export const addCommentById = (msg, name, id) => {
+    return api.put(`/comment`, {
+        // SPECIFY THE PAYLOAD
+        id : id,
+        name : name,
+        msg : msg
+    })
+}
+
 const apis = {
     createPlaylist,
     deletePlaylistById,
@@ -69,7 +78,8 @@ const apis = {
     getPlaylistPairs,
     updatePlaylistById,
     getSearchPairs,
-    likePlaylistById
+    likePlaylistById,
+    addCommentById
 }
 
 export default apis

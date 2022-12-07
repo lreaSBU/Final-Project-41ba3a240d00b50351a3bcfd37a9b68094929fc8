@@ -96,7 +96,8 @@ function ListCard(props) {
         cardStatus = true;
     }
     let ldl = '';
-    let npl = '';
+    //let npl = '';
+    let npl = <Box sx={{ p: 1, flexGrow: 1, fontSize: '16px'}}>{(store.currentView > 1 ? idNamePair.ownerName : (idNamePair.copy.published ? "*Published" : ""))}</Box>
     if(store.currentView > 1){
         ldl = (<div>
             <Box sx={{ p: 1 }}>
@@ -112,7 +113,7 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </div>);
-        npl = <Box sx={{ p: 1, flexGrow: 1, fontSize: '16px'}}>{idNamePair.ownerName}</Box>
+        //npl = <Box sx={{ p: 1, flexGrow: 1, fontSize: '16px'}}>{idNamePair.ownerName}</Box>
     }else{
         ldl = <div>
             <Box>

@@ -1,9 +1,14 @@
 import React, { useContext, useEffect } from 'react'
+import AuthContext from '../auth';
+
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
+import CommentCard from './CommentCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
@@ -14,10 +19,30 @@ import Typography from '@mui/material/Typography'
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {        
         store.loadIdNamePairs();
     }, []);
+
+    function handleCommentSub(event){
+        if(event.key == "Enter"){
+            if(auth.logedIn){
+                var newTerm = document.getElementById('cText').value;
+                console.log("NEW COMMENT : " + newTerm);
+                store.startComment(newTerm);
+            }
+            document.getElementById('cText').value = '';
+        }
+    }
+
+    function handlePlayerTab(e){
+        store.switchTab(0);
+    }
+
+    function handleCommentTab(e){
+        store.switchTab(1);
+    }
 
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -32,38 +57,44 @@ const HomeScreen = () => {
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!RENDERING FOR CURRENTVIEW: " + store.currentView);
         console.log(store.idNamePairs.length);
         console.log(store.searchTerm.length);
-        if(store.currentView > 1){
-            if(store.searchTerm.length > 0){
-                listCard = 
-                <List sx={{ width: '100%', left: '0%', bgcolor: 'background.paper' }}>
-                {
-                    store.searchTerm.map((pair) => (
-                        <ListCard
-                            sx={{bgcolor: ((store.currentList && (pair._id == store.currentList._id)) ? 'red' : 'background.paper')}}
-                            key={pair._id}
-                            idNamePair={pair}
-                            selected={false}
-                        />
-                    ))
-                }
-                </List>;
-            }
-        }else{
-            listCard = 
-            <List sx={{ width: '100%', left: '0%', bgcolor: 'background.paper' }}>
+        listCard = 
+        <List sx={{ width: '100%', left: '0%', bgcolor: 'background.paper' }}>
+        {
+            (store.currentView > 1 ? store.searchTerm : store.idNamePairs).map((pair) => (
+                <ListCard
+                    sx={{bgcolor: ((store.currentList && (pair._id == store.currentList._id)) ? 'red' : 'background.paper')}}
+                    key={pair._id}
+                    idNamePair={pair}
+                    selected={false}
+                />
+            ))
+        }
+        </List>;
+    }
+
+    let inspect = '';
+    if(store.currentList && store.currentList.published) if(store.tabMode){ //comments
+        var index = 0;
+        inspect = 
+        <div>
+            <List sx={{ width: '100%', height: '90%', left: '0%', bgcolor: 'background.paper', overflow: 'auto' }}>
             {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        sx={{bgcolor: ((store.currentList && (pair._id == store.currentList._id)) ? 'red' : 'background.paper')}}
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
+                store.currentList.comments.map((pair) => (
+                    <CommentCard
+                        id={'playlist-comment-' + (index)}
+                        key={'playlist-comment-' + (index++)}
+                        cDat={pair}
                     />
                 ))
             }
-            </List>;
-        }
+            </List>
+            <input id="cText" type="text" onKeyPress={handleCommentSub} />
+        </div>;
+        //inspect = <div>COMMENTS!!!</div>
+    }else{ //player
+        inspect = <div>PLAYER!!!</div>
     }
+
     return (
         <div id="playlist-selector">
             <div id="list-selector-heading">
@@ -74,6 +105,15 @@ const HomeScreen = () => {
                 }
                 <MUIDeleteModal />
                 {modalJSX}
+            </div>
+            <div id="list-inspector">
+                <Box sx={{p : 1, width: "100%", height: "10%", bgColor: '111111'}}>
+                    <Button sx={{bgcolor: '#e1e4cb', fontSize: '16px', textAlign: "center", m: 1}} onClick={handlePlayerTab}>Player</Button>
+                    <Button sx={{bgcolor: '#e1e4cb', fontSize: '16px', textAlign: "center", m: 1}} onClick={handleCommentTab}>Comments</Button>
+                </Box>
+                <Box sx={{p : 1, height: '90%', width: '100%', color: 'red', bgColor: 'red'}}>
+                    {inspect}
+                </Box>
             </div>
         </div>)
 }
