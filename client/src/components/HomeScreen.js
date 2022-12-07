@@ -27,7 +27,7 @@ const HomeScreen = () => {
 
     function handleCommentSub(event){
         if(event.key == "Enter"){
-            if(auth.logedIn){
+            if(auth.loggedIn){
                 var newTerm = document.getElementById('cText').value;
                 console.log("NEW COMMENT : " + newTerm);
                 store.startComment(newTerm);

@@ -460,7 +460,7 @@ function GlobalStoreContextProvider(props) {
     store.publishList = function(pl){
         async function asyncPublish(){
             pl.published = true;
-            console.log("updatePlaylist: " + JSON.stringify(pl));
+            console.log("publishPlaylist: " + JSON.stringify(pl));
             const response = await api.updatePlaylistById(pl._id, pl);
             if (response.data.success) {
                 console.log("PUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHEDPUBLISHED");
@@ -537,27 +537,31 @@ function GlobalStoreContextProvider(props) {
                 console.log("SETTING T TO ::::: " + store.currentView);
                 t = store.currentView;
             }
-            const response = await api.getPlaylistPairs(t);
-            if (response.data.success) {
-                let pairsArray = response.data.idNamePairs;
-                //console.log("SORTING BY ::::: " + sm);
-                switch(sm){
-                    case 1:
-                        //console.log(new Date(pairsArray[0].copy.createdAt).getTime());
-                        pairsArray.sort(function(a, b){return new Date(a.copy.createdAt).getTime() - new Date(b.copy.createdAt).getTime()});
-                    break; case 2:
-                        pairsArray.sort(function(b, a){return new Date(a.copy.updatedAt).getTime() - new Date(b.copy.updatedAt).getTime()});
-                    break; case 3:
-                        pairsArray.sort(function(a, b){return a.copy.name.localeCompare(b.copy.name)});
-                    break;
+            try{
+                const response = await api.getPlaylistPairs(t);
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    //console.log("SORTING BY ::::: " + sm);
+                    switch(sm){
+                        case 1:
+                            //console.log(new Date(pairsArray[0].copy.createdAt).getTime());
+                            pairsArray.sort(function(a, b){return new Date(a.copy.createdAt).getTime() - new Date(b.copy.createdAt).getTime()});
+                        break; case 2:
+                            pairsArray.sort(function(b, a){return new Date(a.copy.updatedAt).getTime() - new Date(b.copy.updatedAt).getTime()});
+                        break; case 3:
+                            pairsArray.sort(function(a, b){return a.copy.name.localeCompare(b.copy.name)});
+                        break;
+                    }
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                        payload: pairsArray
+                    });
                 }
-                storeReducer({
-                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                    payload: pairsArray
-                });
-            }
-            else {
-                console.log("API FAILED TO GET THE LIST PAIRS");
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+            }catch(err){
+                console.log("caught logout error");
             }
         }
         asyncLoadIdNamePairs();

@@ -53,7 +53,7 @@ function ListCard(props) {
     }
 
     function handlePub(e){
-        store.publishList(idNamePair.copy);
+        store.publishList(store.currentList);
     }
 
     function handleToggleEdit(event) {    
