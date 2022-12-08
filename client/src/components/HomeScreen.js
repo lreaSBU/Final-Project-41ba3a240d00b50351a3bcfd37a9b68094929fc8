@@ -3,6 +3,7 @@ import AuthContext from '../auth';
 
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
+import YouTube from './YouTubePlayerExample.js'
 import CommentCard from './CommentCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
@@ -92,7 +93,7 @@ const HomeScreen = () => {
         </div>;
         //inspect = <div>COMMENTS!!!</div>
     }else if(!store.tabMode){ //player
-        inspect = <div>PLAYER!!!</div>
+        inspect = (<YouTube />); //<div>{YPlayer}</div>
     }
 
     return (

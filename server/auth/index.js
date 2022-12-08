@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken")
 function authManager() {
     verify = (req, res, next) => {
         console.log("req: " + req);
-        console.log("next: " + next);
+        //console.log("next: " + next);
         console.log("Who called verify?");
         try {
             const token = req.cookies.token;
@@ -51,7 +51,8 @@ function authManager() {
     }
 
     trivial = (req, res, next) => {
-        console.log('trivially passing new request!!!');
+        //no verification, no user information needed on the controller side
+        console.log('trivially passing: ' + req);
         next();
     }
 

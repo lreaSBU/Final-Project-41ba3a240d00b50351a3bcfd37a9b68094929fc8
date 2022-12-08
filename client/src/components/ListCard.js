@@ -97,7 +97,7 @@ function ListCard(props) {
     }
     let ldl = '';
     //let npl = '';
-    let npl = <Box sx={{ p: 1, flexGrow: 1, fontSize: '16px'}}>{(store.currentView > 1 ? idNamePair.ownerName : (idNamePair.copy.published ? "*Published" : ""))}</Box>
+    let npl = <Box sx={{ p: 1, flexGrow: 1, fontSize: '16px'}}>{(store.currentView > 1 ? idNamePair.ownerName : (idNamePair.copy.published ? "*Published" : "")) + " || Views: " + (isNaN(idNamePair.copy.listens) ? 0 : idNamePair.copy.listens)}</Box>
     if(store.currentView > 1){
         ldl = (<div>
             <Box sx={{ p: 1 }}>

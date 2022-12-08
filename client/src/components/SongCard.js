@@ -33,22 +33,34 @@ function SongCard(props) {
         // UPDATE THE LIST
         store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
-    function handleRemoveSong(event) {
+    function handleRemoveSong(event){
         store.showRemoveSongModal(index, song);
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
             store.showEditSongModal(index, song);
-        }
+        }/*else{
+            store.shiftSongIndex(index, song);
+        }*/
     }
-
+    let delButt = '';
+    if(!store.currentList.published){
+        <input
+            type="button"
+            id={"remove-song-" + index}
+            className="list-card-button"
+            value={"\u2715"}
+            onClick={handleRemoveSong}
+        />
+    }
     let cardClass = "list-card unselected-list-card";
+    let highClass = "list-card selected-list-card";
     return (
         <div
             key={index}
             id={'song-' + index + '-card'}
-            className={cardClass}
+            className={(index == store.currentSongIndex ? highClass : cardClass)}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragEnter={handleDragEnter}
@@ -64,13 +76,7 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <input
-                type="button"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                value={"\u2715"}
-                onClick={handleRemoveSong}
-            />
+            {delButt}
         </div>
     );
 }

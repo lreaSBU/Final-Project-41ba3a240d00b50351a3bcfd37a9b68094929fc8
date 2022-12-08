@@ -34,6 +34,10 @@ body {
   top: 5%;
 }
 
+#youtube_test_player {
+  border: solid 4px #37474F
+}
+
 #app-root {
   position: absolute;
   width: 100%;
@@ -191,8 +195,8 @@ body {
 }
 
 .selected-list-card {
-  background-color: var(--swatch-accent);
-  color: white;
+  background-color: yellow;
+  color: black;
 }
 
 .unselected-list-card {

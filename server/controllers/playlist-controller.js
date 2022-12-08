@@ -101,8 +101,20 @@ getPlaylistById = async (req, res) => {
                 console.log("user._id: " + user._id);
                 console.log("req.userId: " + req.userId);
                 //if (user._id == req.userId) {
-                    console.log("correct user!");
-                    return res.status(200).json({ success: true, playlist: list })
+                    if(list.published && user._id != req.userId) list.listens++;
+                    list
+                    .save()
+                    .then(() => {
+                        console.log("correct user!");
+                        return res.status(200).json({ success: true, playlist: list })
+                    })
+                    .catch(error => {
+                        console.log("FAILURE: " + JSON.stringify(error));
+                        return res.status(404).json({
+                            error,
+                            message: 'Listen count not increased!',
+                        })
+                    })
                 //}
                 //else {
                 //    console.log("incorrect user!");
@@ -318,7 +330,7 @@ updatePlaylist = async (req, res) => {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
                 console.log("user._id: " + user._id);
                 console.log("req.userId: " + req.userId);
-                //if (user._id == req.userId) {
+                if (user._id == req.userId) {
                     console.log("correct user!");
                     console.log("req.body.name: " + req.body.name);
 
@@ -343,12 +355,12 @@ updatePlaylist = async (req, res) => {
                                 message: 'Playlist not updated!',
                             })
                         })
-                /*}
+                }
                 else {
                     console.log(JSON.stringify(body.playlist));
                     console.log("UPDATING WITH incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }*/
+                    return res.status(200).json({ success: true, description: "authentication error", recovery: list });
+                }
             });
         }
         asyncFindUser(playlist);
