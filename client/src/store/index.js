@@ -697,6 +697,22 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentList(id);
     }
 
+    store.justSetCurrentList = function (id) {
+        async function asyncJustSetCurrentList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                tps.clearAllTransactions();
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: playlist
+                });
+                history.push("/playlist/" + playlist._id);
+            }
+        }
+        asyncJustSetCurrentList(id);
+    }
+
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
     }

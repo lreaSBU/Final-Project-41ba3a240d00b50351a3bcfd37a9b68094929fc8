@@ -59,6 +59,7 @@ export default function YouTubePlayerExample() {
     function decSong(){
         currentSong--;
         currentSong = currentSong % playlist.length;
+        //store.shiftSongIndex(currentSong, playlist[currentSong]);
     }
 
     function onPlayerReady(event) {
