@@ -3,6 +3,14 @@ import { useContext } from 'react';
 import YouTube from 'react-youtube';
 import { GlobalStoreContext } from '../store'
 
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import Fab from '@mui/material/Fab'
+
 export default function YouTubePlayerExample() {
     const { store } = useContext(GlobalStoreContext);
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
@@ -11,6 +19,7 @@ export default function YouTubePlayerExample() {
     // FROM ONE SONG TO THE NEXT
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
+    let playRef = null;
     let playlist = store.currentList != null ? store.currentList.songs : [];
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
@@ -47,11 +56,47 @@ export default function YouTubePlayerExample() {
         //store.switchTab(0);
         //store.shiftSongIndex(currentSong, playlist[currentSong]);
     }
+    function decSong(){
+        currentSong--;
+        currentSong = currentSong % playlist.length;
+    }
 
     function onPlayerReady(event) {
+        playRef = event.target;
         console.log("vnduiobhcuwishnvcdishnjvodsahnjvlsxbJKvxlbaxshjvl: " + store.currentSongIndex);
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
+    }
+
+    function handlePlay(e){
+        if(playRef == null){
+            console.log("PLAYREF NULL!!");
+            return;
+        }
+        playRef.playVideo();
+    }
+    function handlePause(e){
+        if(playRef == null){
+            console.log("PLAYREF NULL!!");
+            return;
+        }
+        playRef.pauseVideo();
+    }
+    function handleNext(e){
+        if(playRef == null){
+            console.log("PLAYREF NULL!!");
+            return;
+        }
+        incSong();
+        loadAndPlayCurrentSong(playRef);
+    }
+    function handlePrev(e){
+        if(playRef == null){
+            console.log("PLAYREF NULL!!");
+            return;
+        }
+        decSong();
+        loadAndPlayCurrentSong(playRef);
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -85,9 +130,25 @@ export default function YouTubePlayerExample() {
         }
     }
     //ADD IN THE BUTTONS FOR PLAY, PAUSE, NEXT, AND PREVIOUS HERE IN A DIV WRAPPER!!!:
-    return <YouTube
-        videoId={playlist[currentSong]}
-        opts={playerOptions}
-        onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+    return <div>
+        {(playlist.length == 0 ? 'No songs to play!' : <YouTube
+            videoId={playlist[currentSong]}
+            opts={playerOptions}
+            onReady={onPlayerReady}
+            onStateChange={onPlayerStateChange} />)}
+        <Box>
+            <Fab sx={{mx : '5%'}}>
+                <IconButton size="large" color="inherit" onClick={handlePrev}><FastRewindIcon /></IconButton>
+            </Fab>
+            <Fab sx={{mx : '5%'}}>
+                <IconButton size="large" color="inherit" onClick={handlePlay}><PlayArrowIcon /></IconButton>
+            </Fab>
+            <Fab sx={{mx : '5%'}}>
+                <IconButton size="large" color="inherit" onClick={handlePause}><PauseIcon /></IconButton>
+            </Fab>
+            <Fab sx={{mx : '5%'}}>
+                <IconButton size="large" color="inherit" onClick={handleNext}><FastForwardIcon /></IconButton>
+            </Fab>
+        </Box>
+    </div>;
 }

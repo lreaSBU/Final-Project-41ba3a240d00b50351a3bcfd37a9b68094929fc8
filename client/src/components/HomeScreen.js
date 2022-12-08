@@ -109,8 +109,8 @@ const HomeScreen = () => {
             </div>
             <div id="list-inspector">
                 <Box sx={{p : 1, width: "100%", height: "10%", bgColor: '111111'}}>
-                    <Button sx={{bgcolor: '#e1e4cb', fontSize: '16px', textAlign: "center", m: 1}} onClick={handlePlayerTab}>Player</Button>
-                    <Button sx={{bgcolor: '#e1e4cb', fontSize: '16px', textAlign: "center", m: 1}} onClick={handleCommentTab}>Comments</Button>
+                    <Button sx={{bgcolor: ((!store.currentList || store.tabMode == 1) ? '#e1e4cb' : 'yellow'), fontSize: '16px', textAlign: "center", m: 1}} onClick={handlePlayerTab}>Player</Button>
+                    <Button sx={{bgcolor: ((!store.currentList || store.tabMode == 0) ? '#e1e4cb' : 'yellow'), fontSize: '16px', textAlign: "center", m: 1}} onClick={handleCommentTab}>Comments</Button>
                 </Box>
                 <Box sx={{p : 1, height: '90%', width: '100%', color: 'red', bgColor: 'red'}}>
                     {inspect}

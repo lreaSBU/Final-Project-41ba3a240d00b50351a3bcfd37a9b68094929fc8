@@ -77,6 +77,15 @@ body {
   vertical-align: center;
 }
 
+#splashD{
+  font-size: 4vw;
+  color: red;
+}
+
+#splashC{
+  font-size: 2vw;
+}
+
 #edit-toolbar {
   background-color: transparent;
   float: right;
