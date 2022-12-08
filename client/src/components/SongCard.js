@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
     const { song, index } = props;
 
@@ -45,8 +47,8 @@ function SongCard(props) {
         }*/
     }
     let delButt = '';
-    if(!store.currentList.published){
-        <input
+    if(auth.loggedIn && !store.currentList.published){
+        delButt = <input
             type="button"
             id={"remove-song-" + index}
             className="list-card-button"
